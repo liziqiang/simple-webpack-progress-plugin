@@ -1,0 +1,31 @@
+{
+  "name": "simple-webpack-progress-plugin",
+  "version": "1.0.0",
+  "description": "A simple progress plugin for webpack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liziqiang/simple-webpack-progress-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "progress"
+  ],
+  "author": "Ziqiang Li <ziqiang.lee@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liziqiang/simple-webpack-progress-plugin/issues"
+  },
+  "homepage": "https://github.com/liziqiang/simple-webpack-progress-plugin#readme",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "ora": "^1.3.0"
+  },
+  "peerDependencies": {
+    "webpack": "^1.3.0 || ^2 || ^3"
+  }
+}
