@@ -17,9 +17,15 @@ function SimpleWebpackProgressPlugin() {
         lastStage = '';
     }
 
-    // output last stage
-    function logLast() {
-        spinner.succeed( chalk.grey( lastStage ) );
+    // output stage message
+    function logStage( stage ) {
+        let isLast = lastStage && lastStage !== stage;
+        if ( !stage || isLast ) {
+            spinner.succeed( chalk.grey( lastStage ) );
+        }
+        if ( stage && lastStage !== stage ) {
+            spinner.start( stage );
+        }
     }
 
     return new webpack.ProgressPlugin( ( percentage, stage ) => {
@@ -28,20 +34,12 @@ function SimpleWebpackProgressPlugin() {
             running   = true;
         }
         if ( percentage < 1 ) {
-            // last completed stage
-            if ( lastStage && lastStage !== stage ) {
-                logLast();
-                spinner.start( stage );
-            }
-            // handle first stage
-            if ( !lastStage ) {
-                spinner.start( stage );
-            }
+            logStage( stage );
             // save stage
             lastStage = stage;
         } else {
             // output the last stage
-            logLast();
+            logStage();
             // output overall build time
             let time = (new Date() - startTime) / 1000;
             let info = chalk.green( `done in ${ time } seconds.` );
