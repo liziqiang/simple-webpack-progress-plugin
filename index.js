@@ -19,11 +19,10 @@ function SimpleWebpackProgressPlugin() {
 
     // output stage message
     function logStage( stage ) {
-        let isLast = lastStage && lastStage !== stage;
-        if ( !stage || isLast ) {
+        if ( !stage || lastStage && lastStage !== stage ) {
             spinner.succeed( chalk.grey( lastStage ) );
         }
-        if ( stage && lastStage !== stage ) {
+        if ( stage && stage !== lastStage ) {
             spinner.start( stage );
         }
     }
