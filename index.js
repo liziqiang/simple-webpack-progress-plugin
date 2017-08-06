@@ -11,13 +11,13 @@ function SimpleWebpackProgressPlugin() {
     let lastStage = '';
     let spinner   = ora( { color : 'green', text : chalk.green( 'start building...' ) } ).info();
 
-    // 重置变量
+    // reset variables
     function _reset() {
         running   = false;
         lastStage = '';
     }
 
-    // 输出已经完成的上一个阶段
+    // output last stage
     function logLast() {
         spinner.succeed( chalk.grey( lastStage ) );
     }
@@ -28,24 +28,23 @@ function SimpleWebpackProgressPlugin() {
             running   = true;
         }
         if ( percentage < 1 ) {
-            // 已完成的阶段
+            // last completed stage
             if ( lastStage && lastStage !== stage ) {
                 logLast();
             }
-            // 正在进行中的阶段
+            // current stage
             spinner.start( stage );
-            // 把正在进行中的阶段(栈中不存在的)入栈
+            // save current stage(not the last stage)
             if ( !lastStage || lastStage !== stage ) {
                 lastStage = stage;
             }
         } else {
-            // 把最后阶段输出成完成
+            // output the last stage
             logLast();
-            // 输出整个build的耗时
+            // output overall build time
             let time = (new Date() - startTime) / 1000;
             let info = chalk.green( `done in ${ time } seconds.` );
             spinner.info( info );
-            // 重置build参数
             _reset();
         }
     } );
