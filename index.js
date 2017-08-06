@@ -31,13 +31,14 @@ function SimpleWebpackProgressPlugin() {
             // last completed stage
             if ( lastStage && lastStage !== stage ) {
                 logLast();
+                spinner.start( stage );
             }
-            // current stage
-            spinner.start( stage );
-            // save current stage(not the last stage)
-            if ( !lastStage || lastStage !== stage ) {
-                lastStage = stage;
+            // handle first stage
+            if ( !lastStage ) {
+                spinner.start( stage );
             }
+            // save stage
+            lastStage = stage;
         } else {
             // output the last stage
             logLast();
