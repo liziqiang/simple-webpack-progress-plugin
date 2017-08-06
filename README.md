@@ -1,4 +1,5 @@
 # simple-webpack-progress-plugin
+![simple-webpack-progress-plugin](docs/stages.gif)
 
 ## Installation
 
