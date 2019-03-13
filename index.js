@@ -1,52 +1,64 @@
 /**
  * Created by lizq on 2017/8/6
  */
-const ora     = require( 'ora' );
-const chalk   = require( 'chalk' );
-const webpack = require( 'webpack' );
+const ora = require('ora');
+const chalk = require('chalk');
+const webpack = require('webpack');
 
-function SimpleWebpackProgressPlugin() {
+function SimpleWebpackProgressPlugin(opt = {}) {
     let startTime;
-    let running   = false;
+    let running = false;
     let lastStage = '';
-    let spinner   = ora( { color : 'green', text : chalk.green( 'start building...' ) } );
+    let defaults = Object.assign(
+        { text: 'start building...', delay: 2500 },
+        opt
+    );
+    let spinner;
 
     // reset variables
     function _reset() {
-        running   = false;
+        running = false;
         lastStage = '';
     }
 
     // output stage message
-    function logStage( stage ) {
-        if ( !stage || lastStage && lastStage !== stage ) {
-            spinner.succeed( chalk.grey( lastStage ) );
+    function logStage(stage) {
+        if (!spinner) {
+            spinner = ora({
+                color: 'green',
+                text: chalk.green(defaults.text)
+            }).info();
         }
-        if ( stage && stage !== lastStage ) {
-            spinner.start( stage );
+        if (!stage || (lastStage && lastStage !== stage)) {
+            spinner.succeed(chalk.grey(lastStage));
+        }
+        if (stage) {
+            spinner.start(stage);
         }
     }
 
-    return new webpack.ProgressPlugin( ( percentage, stage ) => {
-        spinner.info();
-        if ( !running ) {
-            startTime = new Date();
-            running   = true;
+    return new webpack.ProgressPlugin((percentage, stage) => {
+        if (!running) {
+            startTime = +new Date();
+            running = true;
         }
-        if ( percentage < 1 ) {
-            logStage( stage );
+        if (+new Date() - startTime < defaults.delay) {
+            return;
+        }
+        if (percentage < 1) {
+            logStage(stage);
             // save stage
             lastStage = stage;
         } else {
             // output the last stage
-            logStage();
+            logStage(percentage);
             // output overall build time
-            let time = (new Date() - startTime) / 1000;
-            let info = chalk.green( `done in ${ time } seconds.` );
-            spinner.info( info );
+            let time = (+new Date() - startTime) / 1000;
+            let info = chalk.green(`done in ${chalk.yellow(time)} seconds.`);
+            spinner.info(info);
             _reset();
         }
-    } );
+    });
 }
 
 module.exports = SimpleWebpackProgressPlugin;
