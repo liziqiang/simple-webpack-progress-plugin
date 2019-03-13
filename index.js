@@ -9,7 +9,7 @@ function SimpleWebpackProgressPlugin() {
     let startTime;
     let running   = false;
     let lastStage = '';
-    let spinner   = ora( { color : 'green', text : chalk.green( 'start building...' ) } ).info();
+    let spinner   = ora( { color : 'green', text : chalk.green( 'start building...' ) } );
 
     // reset variables
     function _reset() {
@@ -28,6 +28,7 @@ function SimpleWebpackProgressPlugin() {
     }
 
     return new webpack.ProgressPlugin( ( percentage, stage ) => {
+        spinner.info();
         if ( !running ) {
             startTime = new Date();
             running   = true;
