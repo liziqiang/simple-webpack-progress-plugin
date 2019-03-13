@@ -5,13 +5,13 @@ const ora = require('ora');
 const chalk = require('chalk');
 const webpack = require('webpack');
 
-function SimpleWebpackProgressPlugin(opt = {}) {
+function SimpleWebpackProgressPlugin(opt) {
     let startTime;
     let running = false;
     let lastStage = '';
     let defaults = Object.assign(
-        { text: 'start building...', delay: 2500 },
-        opt
+        { text: 'start building...', delay: 0 },
+        opt || {}
     );
     let spinner;
 
